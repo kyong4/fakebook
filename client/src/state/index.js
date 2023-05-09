@@ -2,10 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     mode: "light",
-    user: null,
+    user: { friends: [] }, // add an empty array for the friends property
     token: null,
     posts: [],
-};
+  };
 
 export const authSlice = createSlice({
     name: "auth",
@@ -24,12 +24,14 @@ export const authSlice = createSlice({
         },
         setFriends: (state, action) => {
             if (state.user) {
-                state.user.friends = action.payload.friends;
+              state.user.friends = Array.isArray(action.payload.friends)
+                ? action.payload.friends
+                : [];
+            } else {
+              console.error("user non-existent :(");
             }
-            else {
-                console.error("User friends not found")
-            }
-        },
+          },
+          
         setPosts: (state, action) => {
             state.posts = action.payload.posts;
         },
