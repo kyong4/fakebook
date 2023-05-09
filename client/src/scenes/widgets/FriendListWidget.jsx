@@ -9,7 +9,8 @@ const FriendListWidget = ({ userId }) => {
   const dispatch = useDispatch();
   const { palette } = useTheme();
   const token = useSelector((state) => state.token);
-  const friends = useSelector((state) => state.user.friends);
+  const friends = useSelector((state) => state.friends || [], 
+  (prev, next) => prev === next);
 
   const getFriends = async () => {
     const response = await fetch(
@@ -26,6 +27,10 @@ const FriendListWidget = ({ userId }) => {
   useEffect(() => {
     getFriends();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const updateFriendList = (updatedFriends) => {
+    dispatch(setFriends({ friends: updatedFriends }));
+  };
 
   return (
     <WidgetWrapper>
@@ -45,6 +50,7 @@ const FriendListWidget = ({ userId }) => {
             name={`${friend.firstName} ${friend.lastName}`}
             subtitle={friend.occupation}
             userPicturePath={friend.picturePath}
+            updateFriendList={updateFriendList}
           />
         ))}
       </Box>
