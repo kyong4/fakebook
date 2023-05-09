@@ -56,7 +56,7 @@ const Navbar = () => {
             },
           }}
         >
-          Sociopedia
+          MeetMuscles
         </Typography>
         {isNonMobileScreens && (
           <FlexBetween
