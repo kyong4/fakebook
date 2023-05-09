@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { themeSettings } from './theme';
-import FriendList from './components/FriendList';
+
 
 
 
@@ -21,7 +21,7 @@ function App() {
       <BrowserRouter>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <FriendList />
+
           <Routes>
             <Route 
               path="/" 

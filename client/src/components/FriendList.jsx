@@ -5,7 +5,7 @@ function FriendList() {
     <div>
       <h1>My Friends:</h1>
       <ul>
-        {data.friends.map((friend) => (
+        {data.friends&&data.friends.map((friend) => (
           <li key={friend.id}>{friend.name}</li>
         ))}
       </ul>
