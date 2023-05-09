@@ -24,12 +24,12 @@ const AdvertWidget = () => {
         style={{ borderRadius: "0.75rem", margin: "0.75rem 0" }}
       />
       <FlexBetween>
-        <Typography color={main}>AD NAME HERE</Typography>
-        <Typography color={medium}>AD SITE HERE</Typography>
+        <Typography color={main}>MikaCosmetics</Typography>
+        <Typography color={medium}>mikacosmetics.com</Typography>
       </FlexBetween>
       <Typography color={medium} m="0.5rem 0">
-        vel orci porta non pulvinar neque laoreet suspendisse interdum consectetur 
-        libero id faucibus nisl tincidunt eget nullam non nisi
+        Your pathway to stunning and immaculate beauty and made sure your skin
+        is exfoliating skin and shining like light.
       </Typography>
     </WidgetWrapper>
   );
