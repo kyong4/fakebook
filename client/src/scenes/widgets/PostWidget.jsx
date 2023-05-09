@@ -3,11 +3,14 @@ import {
   FavoriteBorderOutlined,
   FavoriteOutlined,
   ShareOutlined,
+  BookmarkBorder,
+  BookmarkOutlined,
 } from "@mui/icons-material";
-import { Box, Divider, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, Divider, IconButton, Typography, useTheme, Button } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import Friend from "components/Friend";
 import WidgetWrapper from "components/WidgetWrapper";
+import PostCategorizer from "./PostCategorizer";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "state";
@@ -24,6 +27,7 @@ const PostWidget = ({
   comments,
 }) => {
   const [isComments, setIsComments] = useState(false);
+  const [PostCategory, setPostCategory] = useState(false);
   const dispatch = useDispatch();
   const token = useSelector((state) => state.token);
   const loggedInUserId = useSelector((state) => state.user._id);
@@ -47,6 +51,11 @@ const PostWidget = ({
     dispatch(setPost({ post: updatedPost }));
   };
 
+  const handleShare = () => {
+    const postUrl = `http://localhost:3000/posts`;
+    navigator.clipboard.writeText(postUrl);
+  };
+
   return (
     <WidgetWrapper m="2rem 0">
       <Friend
@@ -56,12 +65,34 @@ const PostWidget = ({
         userPicturePath={userPicturePath}
       />
       <Typography color={main} sx={{ mt: "1rem" }}>
-        {description}
+         {/* {description.includes('.com') ? <a href={description} target="_blank" rel="noreferrer">Best Buy Link</a> : description } */}
+         {description.includes('.com') ? (
+          <Button
+            onClick={() => window.open(description, "_blank")}
+            variant="contained"
+            style={{
+              cursor: "pointer",
+            }}
+          >
+            Best Buy Link
+          </Button>
+        ) : (
+          <p>{description}</p>
+        )}
+
       </Typography>
-      {picturePath && (
+      {picturePath && picturePath.includes(".com") ? (
         <img
           width="100%"
-          height="auto"
+          height="280px"
+          alt="post"
+          style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
+          src={`${picturePath}`}
+        />
+      ) : (
+        <img
+          width="100%"
+          height="280px"
           alt="post"
           style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
           src={`http://localhost:3001/assets/${picturePath}`}
@@ -84,17 +115,28 @@ const PostWidget = ({
             <IconButton onClick={() => setIsComments(!isComments)}>
               <ChatBubbleOutlineOutlined />
             </IconButton>
-            <Typography>{comments.length}</Typography>
+            <Typography>{comments?.length}</Typography>
           </FlexBetween>
-        </FlexBetween>
+    
+    
+          {!window.location.pathname.includes('saved') && <IconButton onClick={() => setPostCategory(!PostCategory)}>
+            {PostCategory ? (
+              <BookmarkBorder sx={{ color: primary }} />
+            ) : (
+              <BookmarkBorder />
+            )}
+          </IconButton>
+}
 
-        <IconButton>
-          <ShareOutlined />
-        </IconButton>
+        </FlexBetween>
+        <IconButton onClick={handleShare}>
+        <ShareOutlined />
+      </IconButton>
       </FlexBetween>
+
       {isComments && (
         <Box mt="0.5rem">
-          {comments.map((comment, i) => (
+          {comments?.map((comment, i) => (
             <Box key={`${name}-${i}`}>
               <Divider />
               <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
@@ -105,6 +147,14 @@ const PostWidget = ({
           <Divider />
         </Box>
       )}
+            <Box mt="0.5rem">
+        {PostCategory && <PostCategorizer postId={postId} likes={likes} picturePath={picturePath}
+          userPicturePath={userPicturePath}
+          name={name}
+          description={description}
+          location={location} 
+          comments={comments}/>}
+      </Box>
     </WidgetWrapper>
   );
 };

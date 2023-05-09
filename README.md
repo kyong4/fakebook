@@ -32,7 +32,7 @@ PORT=3001
 
 ## Usage
 
-To start the application, run the following command in both the client and server directory:
+To run the application locally, run the following command in both the client and server directory:
 
 ```
 npm start
