@@ -1,7 +1,12 @@
-import { useState } from "react";
-import { Typography, useTheme } from "@mui/material";
+import { useState, useEffect } from "react";
+import { Typography, useTheme, IconButton, Button } from "@mui/material";
+import {
+  ArrowBackIosNewRounded,
+  ArrowForwardIosRounded,
+} from "@mui/icons-material";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
+import axios from 'axios';
 
 const AdvertWidget = () => {
   const { palette } = useTheme();
@@ -9,12 +14,24 @@ const AdvertWidget = () => {
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
 
-  const slideImages = [
-    "http://localhost:3001/assets/info1.jpeg",
-    "http://localhost:3001/assets/info2.jpeg",
-    "http://localhost:3001/assets/info3.jpeg",
-    "http://localhost:3001/assets/info4.jpeg",
-  ];
+  const [data, setData] = useState([]);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`https://sheetdb.io/api/v1/kwecdtehfatvt`);
+      const data = response.data;
+      console.log('93', data);
+      setData(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const slideImages = data.map(item => item.ProductLink);
 
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -25,6 +42,13 @@ const AdvertWidget = () => {
       setCurrentSlide((prev) => (prev === 0 ? slideImages.length - 1 : prev - 1));
     }
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleSlideChange("next");
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <WidgetWrapper>
@@ -52,10 +76,30 @@ const AdvertWidget = () => {
             }}
           />
         ))}
+        < IconButton ><ArrowBackIosNewRounded /></IconButton>
         <div style={{ position: "absolute", top: "50%", left: "0", transform: "translateY(-50%)", cursor: "pointer" }} onClick={() => handleSlideChange("prev")}>
           {"<"}
+          < IconButton ><ArrowForwardIosRounded /></IconButton>
         </div>
         <div style={{ position: "absolute", top: "50%", right: "0", transform: "translateY(-50%)", cursor: "pointer" }} onClick={() => handleSlideChange("next")}>
+        {data.map((item, k) => (
+  <div key={k} style={{
+    position: k === currentSlide ? "static" : "absolute",
+    width: "100%",
+    height: "auto",
+    transition: "opacity 0.5s",
+    opacity: k === currentSlide ? 1 : 0,
+  }}>
+    <FlexBetween>
+      <Typography variant="h4" component="h4" color={main}>{item.Price}</Typography>
+      <Typography color={medium}><a href={item.Link}>Quick Buy</a></Typography>
+    </FlexBetween>
+    <Typography color={medium} m="0.5rem 0">
+      {item.Description}
+    </Typography>
+  </div>
+))}
+
           {">"}
         </div>
       </div>
