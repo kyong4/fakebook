@@ -5,8 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { setFriends } from "state";
 import FlexBetween from "./FlexBetween";
 import UserImage from "./UserImage";
+import moment from "moment/moment";
 
-const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
+const Friend = ({ friendId, name, subtitle, userPicturePath, createdAt }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { _id } = useSelector((state) => state.user);
@@ -40,12 +41,13 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
   return (
     <FlexBetween>
       <FlexBetween gap="1rem">
-        <UserImage image={userPicturePath} size="55px" />
+        <UserImage image={userPicturePath} size="45px" />
         <Box
           onClick={() => {
             navigate(`/profile/${friendId}`);
             navigate(0);
           }}
+          sx={{}}
         >
           <Typography
             color={main}
@@ -60,12 +62,20 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
           >
             {name}
           </Typography>
+          <Typography
+            color={main}
+            variant="subtitle2"
+            fontWeight="400"
+            sx={{}}
+          >
+            {moment(createdAt).fromNow()}
+          </Typography>
           <Typography color={medium} fontSize="0.75rem">
             {subtitle}
           </Typography>
         </Box>
       </FlexBetween>
-        {!isSelf && (
+      {friendId !== _id && (
         <IconButton
           onClick={() => patchFriend()}
           sx={{ backgroundColor: primaryLight, p: "0.6rem" }}
