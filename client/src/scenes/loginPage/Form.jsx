@@ -160,7 +160,7 @@ const Form = () => {
                   sx={{ gridColumn: "span 2" }}
                 />
                 <TextField
-                  label="Location"
+                  label="Gym Location"
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.location}
@@ -170,7 +170,7 @@ const Form = () => {
                   sx={{ gridColumn: "span 4" }}
                 />
                 <TextField
-                  label="Occupation"
+                  label="Fitness Type (weightlifting, sports, etc..)"
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.occupation}
